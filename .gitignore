@@ -1,5 +1,3 @@
-# Ignore settings and compiled files
-josmee_projects/settings.py
 josmee_projects/__pycache__/
 .env
 Django==4.2.10
