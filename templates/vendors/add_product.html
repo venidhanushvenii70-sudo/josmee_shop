@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Add Product - Josmee Seller{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm" style="border-radius: 20px; overflow: hidden;">
+                <div class="card-header" style="background: linear-gradient(135deg, #3a6828 0%, #2d5016 100%); color: white; padding: 24px;">
+                    <h3 class="mb-0 fw-bold">
+                        <i class="fas fa-plus-circle me-2"></i> Add New Product
+                    </h3>
+                    <p class="mb-0 mt-2 opacity-75">Upload your product and make it visible to thousands of customers</p>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST" enctype="multipart/form-data" id="addProductForm">
+                        {% csrf_token %}
+                        
+                        <!-- Product Name -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold" style="color: #2c3e50;">
+                                <i class="fas fa-tag me-2" style="color: #3a6828;"></i>Product Name*
+                            </label>
+                            <input type="text" name="name" class="form-control" required 
+                                   style="border-radius: 12px; border: 2px solid #e3d5ca; padding: 12px;"
+                                   placeholder="e.g., Premium Cotton T-Shirt">
+                        </div>
+                        
+                        <!-- Description -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold" style="color: #2c3e50;">
+                                <i class="fas fa-align-left me-2" style="color: #3a6828;"></i>Description*
+                            </label>
+                            <textarea name="description" class="form-control" rows="5" required
+                                      style="border-radius: 12px; border: 2px solid #e3d5ca; padding: 12px;"
+                                      placeholder="Describe your product in detail..."></textarea>
+                        </div>
+                        
+                        <div class="row">
+                            <!-- Category -->
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label fw-bold" style="color: #2c3e50;">
+                                    <i class="fas fa-th-large me-2" style="color: #3a6828;"></i>Category*
+                                </label>
+                                <select name="category" class="form-select" required
+                                        style="border-radius: 12px; border: 2px solid #e3d5ca; padding: 12px;">
+                                    <option value="">Select Category</option>
+                                    {% for category in categories %}
+                                    <option value="{{ category.id }}">{{ category.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            
+                            <!-- Stock -->
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label fw-bold" style="color: #2c3e50;">
+                                    <i class="fas fa-boxes me-2" style="color: #3a6828;"></i>Stock Quantity*
+                                </label>
+                                <input type="number" name="stock" class="form-control" required min="0"
+                                       style="border-radius: 12px; border: 2px solid #e3d5ca; padding: 12px;"
+                                       placeholder="100">
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <!-- Price -->
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label fw-bold" style="color: #2c3e50;">
+                                    <i class="fas fa-rupee-sign me-2" style="color: #3a6828;"></i>Price (₹)*
+                                </label>
+                                <input type="number" name="price" step="0.01" class="form-control" required min="0"
+                                       style="border-radius: 12px; border: 2px solid #e3d5ca; padding: 12px;"
+                                       placeholder="999.00">
+                            </div>
+                            
+                            <!-- Discount Price -->
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label fw-bold" style="color: #2c3e50;">
+                                    <i class="fas fa-tags me-2" style="color: #3a6828;"></i>Discount Price (₹)
+                                    <small class="text-muted">(Optional)</small>
+                                </label>
+                                <input type="number" name="discount_price" step="0.01" class="form-control" min="0"
+                                       style="border-radius: 12px; border: 2px solid #e3d5ca; padding: 12px;"
+                                       placeholder="799.00">
+                            </div>
+                        </div>
+                        
+                        <!-- Product Images -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold" style="color: #2c3e50;">
+                                <i class="fas fa-images me-2" style="color: #3a6828;"></i>Product Images*
+                            </label>
+                            <input type="file" name="images" class="form-control" multiple accept="image/*" required
+                                   style="border-radius: 12px; border: 2px solid #e3d5ca; padding: 12px;">
+                            <small class="text-muted d-block mt-2">
+                                <i class="fas fa-info-circle me-1"></i>
+                                Select multiple images. First image will be the main product image.
+                            </small>
+                        </div>
+                        
+                        <!-- Submit Buttons -->
+                        <div class="d-grid gap-3 mt-4">
+                            <button type="submit" class="josmee-btn josmee-btn-primary" style="padding: 16px; font-size: 16px;">
+                                <i class="fas fa-check-circle me-2"></i> Add Product & Make it Visible
+                            </button>
+                            <a href="{% url 'vendors:dashboard' %}" class="btn btn-outline-secondary" style="border-radius: 12px; padding: 14px; border-width: 2px;">
+                                <i class="fas fa-arrow-left me-2"></i> Back to Dashboard
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.form-control:focus, .form-select:focus {
+    border-color: #3a6828 !important;
+    box-shadow: 0 0 0 0.2rem rgba(58, 104, 40, 0.15) !important;
+}
+</style>
+{% endblock %}

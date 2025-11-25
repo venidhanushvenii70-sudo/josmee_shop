@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Verify OTP - Josmee{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 500px; margin-top: 80px; margin-bottom: 80px;">
+    <div class="josmee-cta-card" style="padding: 40px;">
+        <div class="text-center mb-4">
+            <div style="width: 80px; height: 80px; background: white; border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                <i class="fas fa-shield-alt" style="font-size: 40px; color: var(--josmee-primary);"></i>
+            </div>
+            <h2 style="color: white; font-size: 28px; font-weight: 800;">Verify OTP</h2>
+            <p style="color: rgba(255,255,255,0.9); margin-top: 10px;">
+                Enter the 6-digit code sent to<br>
+                <strong style="font-size: 18px;">+91 {{ phone }}</strong>
+            </p>
+        </div>
+
+        <form method="post" id="otpForm" style="position: relative; z-index: 1;">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label for="otp" style="color: white; font-weight: 600; margin-bottom: 10px; display: block;">
+                    <i class="fas fa-key me-2"></i>Enter OTP
+                </label>
+                <input 
+                    type="text" 
+                    class="form-control text-center" 
+                    id="otp" 
+                    name="otp" 
+                    placeholder="000000"
+                    maxlength="6"
+                    pattern="[0-9]{6}"
+                    required
+                    style="font-size: 32px; font-weight: 700; letter-spacing: 10px; padding: 20px; border-radius: 12px; border: 3px solid white;"
+                >
+            </div>
+
+            <button type="submit" class="josmee-btn josmee-btn-primary w-100" style="background: white; color: var(--josmee-primary); font-size: 16px; padding: 14px;">
+                <i class="fas fa-check-circle me-2"></i>Verify & Login
+            </button>
+        </form>
+
+        <div class="text-center mt-4" style="position: relative; z-index: 1;">
+            <p style="color: rgba(255,255,255,0.9); margin-bottom: 10px;">Didn't receive the code?</p>
+            <a href="{% url 'accounts:resend_otp' %}" class="josmee-btn" style="background: rgba(255,255,255,0.2); color: white; font-weight: 600; padding: 10px 24px;">
+                <i class="fas fa-redo me-2"></i>Resend OTP
+            </a>
+        </div>
+
+        <div class="text-center mt-4" style="position: relative; z-index: 1;">
+            <a href="{% url 'accounts:otp_login_request' %}" style="color: white; font-weight: 600; text-decoration: none;">
+                <i class="fas fa-arrow-left me-2"></i>Change Phone Number
+            </a>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+const otpInput = document.getElementById('otp');
+
+// Auto-submit form when 6 digits entered
+otpInput.addEventListener('input', function(e) {
+    this.value = this.value.replace(/[^0-9]/g, '');
+    
+    if (this.value.length === 6) {
+        document.getElementById('otpForm').submit();
+    }
+});
+
+// Auto-focus OTP input
+otpInput.focus();
+</script>
+{% endblock %}
+{% endblock %}

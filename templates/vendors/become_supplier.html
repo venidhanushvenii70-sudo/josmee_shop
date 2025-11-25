@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Become a Supplier - Sell Online on Josmee{% endblock %}
+
+{% block content %}
+<div class="bg-white">
+    <!-- Hero Section -->
+    <div class="relative bg-gradient-to-r from-primary to-blue-900 text-white py-16 md:py-24">
+        <div class="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-12">
+            <div class="md:w-1/2 space-y-6">
+                <h1 class="text-4xl md:text-5xl font-bold font-serif leading-tight">
+                    Sell Online to <br>Crores of Customers
+                </h1>
+                <p class="text-lg text-blue-100 opacity-90 max-w-lg">
+                    Join India's fastest growing reseller platform. 0% Commission, 0 Penalty Charges, and easy growth for your business.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                    <a href="{% url 'vendors:seller_registration_step1' %}" class="inline-flex justify-center items-center bg-white text-primary px-8 py-3.5 rounded-full font-bold text-lg hover:bg-gray-100 transition shadow-lg transform hover:-translate-y-1">
+                        Start Selling
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="md:w-1/2 flex justify-center">
+                <!-- Using placeholder for illustration -->
+                <div class="bg-white/10 backdrop-blur-sm p-8 rounded-2xl border border-white/20 shadow-2xl">
+                    <div class="grid grid-cols-2 gap-6 text-center">
+                        <div class="p-4 bg-white/10 rounded-xl">
+                            <div class="text-3xl font-bold mb-1">11 Lakh+</div>
+                            <div class="text-sm opacity-80">Trusted Suppliers</div>
+                        </div>
+                        <div class="p-4 bg-white/10 rounded-xl">
+                            <div class="text-3xl font-bold mb-1">14 Crore+</div>
+                            <div class="text-sm opacity-80">Customers</div>
+                        </div>
+                        <div class="p-4 bg-white/10 rounded-xl">
+                            <div class="text-3xl font-bold mb-1">28000+</div>
+                            <div class="text-sm opacity-80">Pincodes Served</div>
+                        </div>
+                        <div class="p-4 bg-white/10 rounded-xl">
+                            <div class="text-3xl font-bold mb-1">700+</div>
+                            <div class="text-sm opacity-80">Categories</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Wave shape divider -->
+        <div class="absolute bottom-0 left-0 right-0">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" class="text-white fill-current">
+                <path fill-opacity="1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,160C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Why Sell Section -->
+    <div class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-900 mb-16 font-serif">Why Suppliers Love Josmee</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Benefit 1 -->
+                <div class="bg-blue-50 rounded-2xl p-8 hover:shadow-xl transition border border-blue-100 group">
+                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center text-3xl text-primary shadow-sm mb-6 group-hover:scale-110 transition">
+                        <i class="fas fa-percentage"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">0% Commission Fee</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Suppliers selling on Josmee keep 100% of their profit by not paying any commission charges.
+                    </p>
+                </div>
+                
+                <!-- Benefit 2 -->
+                <div class="bg-blue-50 rounded-2xl p-8 hover:shadow-xl transition border border-blue-100 group">
+                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center text-3xl text-primary shadow-sm mb-6 group-hover:scale-110 transition">
+                        <i class="fas fa-ban"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">0 Penalty Charges</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Sell online without fear of order cancellation charges with our 0 Penalty Feature.
+                    </p>
+                </div>
+                
+                <!-- Benefit 3 -->
+                <div class="bg-blue-50 rounded-2xl p-8 hover:shadow-xl transition border border-blue-100 group">
+                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center text-3xl text-primary shadow-sm mb-6 group-hover:scale-110 transition">
+                        <i class="fas fa-truck-fast"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Ease of Doing Business</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Easy product listing, lowest shipping cost, and 7-day payment cycle from the date of delivery.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- How It Works -->
+    <div class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-900 mb-16 font-serif">How It Works</h2>
+            
+            <div class="max-w-4xl mx-auto">
+                <!-- Step 1 -->
+                <div class="flex flex-col md:flex-row gap-8 mb-12 items-center">
+                    <div class="flex-shrink-0 w-16 h-16 bg-primary text-white rounded-full flex items-center justify-center text-2xl font-bold shadow-lg">1</div>
+                    <div class="flex-grow bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                        <h3 class="text-xl font-bold mb-2">Create Account</h3>
+                        <p class="text-gray-600">Register with your mobile number and GSTIN. Complete your profile with bank details.</p>
+                    </div>
+                </div>
+                
+                <!-- Step 2 -->
+                <div class="flex flex-col md:flex-row gap-8 mb-12 items-center">
+                    <div class="flex-shrink-0 w-16 h-16 bg-primary text-white rounded-full flex items-center justify-center text-2xl font-bold shadow-lg">2</div>
+                    <div class="flex-grow bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                        <h3 class="text-xl font-bold mb-2">List Products</h3>
+                        <p class="text-gray-600">Upload your product catalog. Our tools make it easy to list products in bulk.</p>
+                    </div>
+                </div>
+                
+                <!-- Step 3 -->
+                <div class="flex flex-col md:flex-row gap-8 mb-12 items-center">
+                    <div class="flex-shrink-0 w-16 h-16 bg-primary text-white rounded-full flex items-center justify-center text-2xl font-bold shadow-lg">3</div>
+                    <div class="flex-grow bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                        <h3 class="text-xl font-bold mb-2">Receive Orders</h3>
+                        <p class="text-gray-600">Start receiving orders from crores of customers across India.</p>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="flex flex-col md:flex-row gap-8 items-center">
+                    <div class="flex-shrink-0 w-16 h-16 bg-primary text-white rounded-full flex items-center justify-center text-2xl font-bold shadow-lg">4</div>
+                    <div class="flex-grow bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                        <h3 class="text-xl font-bold mb-2">Receive Payments</h3>
+                        <p class="text-gray-600">Get payments directly in your bank account every 7 days from delivery.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-16">
+                <a href="{% url 'vendors:seller_registration_step1' %}" class="inline-flex justify-center items-center bg-primary text-white px-10 py-4 rounded-full font-bold text-lg hover:bg-blue-800 transition shadow-xl transform hover:-translate-y-1">
+                    Register Now
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="bg-white">
+    <!-- Hero Section -->
+    <div class="relative bg-primary py-20 text-white overflow-hidden">
+        <div class="absolute inset-0 opacity-10 bg-[url('{% static 'images/pattern.png' %}')]"></div>
+        <!-- Dynamic Hero Image -->
+        {% if about_content.hero_image %}
+            <div class="absolute inset-0 z-0">
+                <img src="{{ about_content.hero_image.url }}" class="w-full h-full object-cover opacity-20">
+            </div>
+        {% endif %}
+        <div class="container mx-auto px-4 relative z-10 text-center">
+            <!-- Dynamic Title -->
+            <h1 class="text-4xl md:text-5xl font-serif font-bold mb-6">{{ about_content.title|default:"About Josmee" }}</h1>
+            <p class="text-xl md:text-2xl opacity-90 max-w-2xl mx-auto">Empowering small businesses and bringing the best of India to your doorstep.</p>
+        </div>
+    </div>
+
+    <!-- Mission Section -->
+    <div style="max-width: 1200px; margin-left: auto; margin-right: auto; padding: 4rem 1rem;">
+        <div class="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+                <!-- Dynamic Mission Title and Content -->
+                <h2 class="text-3xl font-serif font-bold text-gray-900 mb-6">{{ about_content.mission_title|default:"Our Mission" }}</h2>
+                {% if about_content %}
+                    <div class="text-gray-600 leading-relaxed mb-6 prose prose-lg">
+                        {{ about_content.mission_content|linebreaks }}
+                    </div>
+                {% else %}
+                    <p class="text-gray-600 leading-relaxed mb-6">
+                        At Josmee, we believe in the power of small businesses. Our platform is designed to connect millions of sellers, manufacturers, and small brands directly with customers across the country.
+                    </p>
+                {% endif %}
+            </div>
+            <div class="relative h-80 bg-gray-100 rounded-2xl overflow-hidden shadow-lg">
+                <!-- Dynamic Mission Image -->
+                {% if about_content.mission_image %}
+                    <img src="{{ about_content.mission_image.url }}" class="w-full h-full object-cover">
+                {% else %}
+                    <div class="absolute inset-0 flex items-center justify-center text-gray-400 bg-gray-50">
+                        <i class="fas fa-store text-6xl"></i>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Values Grid -->
+    <div class="bg-gray-50 py-16">
+        <div style="max-width: 1200px; margin-left: auto; margin-right: auto; padding: 0 1rem;">
+            <div class="text-center mb-12">
+                <!-- Dynamic Values Title -->
+                <h2 class="text-3xl font-serif font-bold text-gray-900">{{ about_content.values_title|default:"Why Choose Us?" }}</h2>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Dynamic Value Propositions -->
+                {% if about_content and about_content.values.all %}
+                    {% for value in about_content.values.all %}
+                    <div class="bg-white p-8 rounded-xl shadow-sm text-center">
+                        <div class="w-16 h-16 bg-blue-100 text-primary rounded-full flex items-center justify-center mx-auto mb-6 text-2xl">
+                            <i class="{{ value.icon }}"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-3">{{ value.title }}</h3>
+                        <p class="text-gray-600">{{ value.description }}</p>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <!-- Default Static Values -->
+                    <div class="bg-white p-8 rounded-xl shadow-sm text-center">
+                        <div class="w-16 h-16 bg-blue-100 text-primary rounded-full flex items-center justify-center mx-auto mb-6 text-2xl">
+                            <i class="fas fa-tag"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-3">Lowest Prices</h3>
+                        <p class="text-gray-600">Direct from manufacturers means you save more on every purchase.</p>
+                    </div>
+                    <!-- ... other static values ... -->
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

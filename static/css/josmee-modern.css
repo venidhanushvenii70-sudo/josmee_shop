@@ -1,0 +1,336 @@
+/*
+    Custom CSS for Josmee
+    Tailwind CSS is used for utility classes.
+    This file contains specific overrides or custom animations.
+*/
+
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom Text Gradient */
+.josmee-text-gradient {
+  background: linear-gradient(90deg, #f43397 0%, #ff5252 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Mobile Bottom Nav Active State */
+.mobile-nav-active {
+  color: #f43397;
+}
+
+/* Loader/Spinner if needed */
+.loader {
+  border: 3px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 3px solid #f43397;
+  width: 24px;
+  height: 24px;
+  -webkit-animation: spin 1s linear infinite; /* Safari */
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Form inputs focus ring override */
+input:focus,
+textarea:focus,
+select:focus {
+  box-shadow: 0 0 0 2px rgba(244, 51, 151, 0.2);
+}
+
+/* Ensure images don't overflow */
+img {
+  max-width: 100%;
+}
+
+/* Added Meesho-style product detail page styles */
+
+/* Product Detail Page Styles */
+.main-product-image:hover {
+  transform: scale(1.02);
+  transition: transform 0.3s ease;
+}
+
+.thumbnail-wrapper:hover {
+  border-color: #3b5998 !important;
+  transition: border-color 0.2s ease;
+}
+
+.related-product-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+.action-buttons-container .btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 89, 152, 0.2);
+}
+
+/* Added comprehensive mobile responsive styles matching globals.css */
+/* Mobile Responsive Styles - Matching Next.js globals.css behavior */
+
+/* Base Mobile Styles */
+@media (max-width: 768px) {
+  /* Global mobile fixes */
+  body {
+    font-size: 14px;
+    overflow-x: hidden;
+  }
+
+  /* Container adjustments */
+  .container {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  /* Header responsive fixes */
+  header .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  /* Typography scaling */
+  h1 {
+    font-size: 1.5rem !important;
+    line-height: 1.3;
+  }
+
+  h2 {
+    font-size: 1.25rem !important;
+  }
+
+  h3 {
+    font-size: 1.125rem !important;
+  }
+
+  /* Button adjustments */
+  .btn,
+  button {
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  /* Form controls */
+  input,
+  textarea,
+  select {
+    font-size: 16px !important; /* Prevents zoom on iOS */
+  }
+
+  /* Grid spacing improvements */
+  .grid {
+    gap: 0.75rem;
+  }
+
+  /* Card padding adjustments */
+  .bg-white,
+  .card {
+    padding: 0.75rem;
+  }
+
+  /* Image containers */
+  .aspect-square,
+  .aspect-ratio {
+    border-radius: 0.5rem;
+  }
+
+  /* Modal and overlay improvements */
+  .modal,
+  .overlay {
+    padding: 1rem;
+  }
+
+  /* Navigation improvements */
+  nav {
+    font-size: 0.875rem;
+  }
+
+  /* Footer spacing */
+  footer {
+    padding-top: 2rem;
+    padding-bottom: 5rem; /* Account for bottom nav */
+  }
+
+  footer .grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  /* Hide desktop-only elements */
+  .hidden-mobile {
+    display: none !important;
+  }
+
+  /* Search bar mobile fixes */
+  input[type="text"],
+  input[type="search"] {
+    -webkit-appearance: none;
+    border-radius: 0.5rem;
+  }
+}
+
+/* Tablet adjustments */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  h1 {
+    font-size: 1.875rem;
+  }
+}
+
+/* Product detail mobile responsive adjustments */
+@media (max-width: 991px) {
+  .product-image-container {
+    position: static !important;
+    margin-bottom: 1.5rem;
+  }
+
+  .product-details-wrapper {
+    padding: 0 !important;
+  }
+
+  .action-buttons-container {
+    position: fixed;
+    bottom: 60px; /* Above mobile nav */
+    left: 0;
+    right: 0;
+    padding: 1rem;
+    background: white;
+    border-top: 1px solid #e5e7eb;
+    z-index: 40;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+  }
+}
+
+@media (max-width: 576px) {
+  .product-title {
+    font-size: 18px !important;
+    line-height: 1.4;
+    margin-bottom: 0.75rem;
+  }
+
+  .current-price {
+    font-size: 24px !important;
+  }
+
+  .original-price {
+    font-size: 14px !important;
+  }
+
+  .action-buttons-container .d-flex {
+    flex-direction: row !important;
+    gap: 0.5rem;
+  }
+
+  .action-buttons-container .btn {
+    flex: 1;
+    padding: 0.75rem 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  /* Product grid mobile improvements */
+  .product-card {
+    border-radius: 0.75rem;
+  }
+
+  .product-card img {
+    border-radius: 0.75rem 0.75rem 0 0;
+  }
+
+  /* Cart mobile fixes */
+  .cart-item {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .cart-item-image {
+    width: 100%;
+    max-width: 150px;
+  }
+
+  /* Checkout mobile */
+  .checkout-summary {
+    position: fixed;
+    bottom: 60px;
+    left: 0;
+    right: 0;
+    background: white;
+    padding: 1rem;
+    border-top: 2px solid #e5e7eb;
+    z-index: 40;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+  }
+}
+
+/* Extra small devices (phones in portrait) */
+@media (max-width: 375px) {
+  h1 {
+    font-size: 1.25rem !important;
+  }
+
+  .container {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  .btn {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.75rem;
+  }
+}
+
+/* iOS specific fixes */
+@supports (-webkit-touch-callout: none) {
+  /* Prevent zoom on input focus */
+  input,
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+
+  /* Safe area insets for notched devices */
+  .mobile-bottom-nav {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  header {
+    padding-top: env(safe-area-inset-top);
+  }
+}
+
+/* Touch device improvements */
+@media (hover: none) and (pointer: coarse) {
+  /* Larger tap targets */
+  a,
+  button {
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Remove hover effects on touch devices */
+  .hover\:scale-105:hover {
+    transform: none;
+  }
+
+  .hover\:shadow-md:hover {
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+  }
+}
+/* </CHANGE> */

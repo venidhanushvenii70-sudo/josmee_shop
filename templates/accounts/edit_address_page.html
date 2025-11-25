@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Address - Josmee{% endblock %}
+
+{% block content %}
+<div class="custom-container">
+
+    <h2 class="form-title">
+        <i class="fas fa-map-marker-alt" style="color: var(--josmee-primary);"></i> Add New Address
+    </h2>
+
+    <form method="POST" action="{% url 'accounts:add_address' %}">
+        {% csrf_token %}
+
+        <div class="card card-custom border-0">
+            <div class="card-body p-4 p-md-5">
+
+                <div class="mb-4">
+                    <label class="form-label fw-bold custom-label">Full Name</label>
+                    <input type="text" name="full_name" class="form-control custom-input" required placeholder="Enter full name">
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-bold custom-label">Phone Number</label>
+                    <input type="text" name="phone" class="form-control custom-input" required placeholder="Enter 10-digit mobile number">
+                </div>
+
+                <hr class="form-divider">
+
+                <div class="mb-4">
+                    <label class="form-label fw-bold custom-label">Address Line 1 (House/Flat No, Building)</label>
+                    <input type="text" name="address_line1" class="form-control custom-input" required placeholder="House number, Building name, Street">
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-bold custom-label">Address Line 2 (Landmark, Area)</label>
+                    <input type="text" name="address_line2" class="form-control custom-input" placeholder="Road name, Area, Colony (Optional)">
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold custom-label">City</label>
+                        <input type="text" name="city" class="form-control custom-input" required placeholder="Enter city name">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold custom-label">State</label>
+                        <input type="text" name="state" class="form-control custom-input" required placeholder="Enter state name">
+                    </div>
+                </div>
+
+                <div class="mb-4 mt-3"> <label class="form-label fw-bold custom-label">Pincode</label>
+                    <input type="text" name="pincode" class="form-control custom-input" required placeholder="Enter 6-digit Pincode">
+                </div>
+                
+                <hr class="form-divider">
+
+                <div class="form-check mb-5 p-3 border rounded default-check-box">
+                    <input type="checkbox" name="is_default" class="form-check-input" id="is_default">
+                    <label class="form-check-label fw-bold default-check-label" for="is_default">Set as default address</label>
+                </div>
+
+                <button type="submit" class="btn w-100 custom-submit-btn">
+                    SAVE ADDRESS
+                </button>
+
+            </div>
+        </div>
+    </form>
+</div>
+
+<style>
+    /* 🎨 Global Variables */
+    :root {
+        --josmee-primary: #3B5998;
+        --josmee-shadow: rgba(59, 89, 152, 0.3);
+        --josmee-light-blue: #f8faff;
+        --josmee-light-border: #e2e8f0;
+        --josmee-label-color: #475569;
+    }
+
+    /* 📦 Main Container and Title */
+    .custom-container {
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 32px 16px;
+    }
+    .form-title {
+        font-size: 26px;
+        font-weight: 700;
+        color: #1e293b;
+    }
+    .card-custom {
+        border-radius: 16px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); /* Softer card shadow */
+    }
+    .form-divider {
+        margin: 30px 0;
+        border-top: 1px solid #eee;
+    }
+
+    /* 🏷️ Custom Label Styling */
+    .custom-label {
+        color: var(--josmee-label-color);
+        margin-bottom: 6px; /* Slightly increased for separation */
+        font-size: 14px;
+        display: block; /* Ensures alignment */
+    }
+
+    /* ⌨️ Custom Input Field Styling */
+    .custom-input {
+        border-radius: 8px; /* Slightly modern radius */
+        padding: 12px 15px;
+        border: 1px solid var(--josmee-light-border); /* Thinner border for cleaner look */
+        transition: border-color 0.2s, box-shadow 0.2s;
+        /* FIX: Ensures the input takes the full width of the col-md-6 for perfect horizontal alignment */
+        width: 100%; 
+    }
+
+    .custom-input:focus {
+        border-color: var(--josmee-primary);
+        box-shadow: 0 0 0 0.2rem rgba(59, 89, 152, 0.2);
+    }
+
+    /* ⚙️ Default Checkbox Area */
+    .default-check-box {
+        background: var(--josmee-light-blue) !important;
+        border-color: #e0e7ff !important;
+        padding-left: 2.5rem !important; /* Ensure proper indent for form-check */
+    }
+    .default-check-label {
+        color: var(--josmee-primary);
+    }
+    
+    /* 🚀 Submit Button */
+    .custom-submit-btn {
+        background: var(--josmee-primary);
+        color: white;
+        font-weight: 700;
+        font-size: 18px;
+        padding: 15px;
+        border: none;
+        border-radius: 8px; /* Consistent radius */
+        box-shadow: 0 4px 12px var(--josmee-shadow);
+        transition: background 0.2s;
+    }
+
+    .custom-submit-btn:hover {
+        background: #2c4373;
+        color: white;
+    }
+</style>
+{% endblock %}

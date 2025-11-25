@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+
+{% block title %}Shopping Cart - Josmee{% endblock %}
+
+{% block content %}
+
+<style>
+/* ================================
+   DESKTOP VIEW (>992px)
+   LEFT = PRODUCTS | RIGHT = PRICE (Matches image_92dfc0.png)
+================================= */
+@media (min-width: 992px) {
+    /* Product Details (col-lg-7) in the HTML should appear FIRST (order: 1) on the desktop (Left) */
+    .product-details-col { order: 1; } 
+    /* Price Details (col-lg-5) in the HTML should appear SECOND (order: 2) on the desktop (Right) */
+    .price-details-col { order: 2; } 
+}
+
+/* ================================
+   MOBILE VIEW (<992px)
+   TOP = PRODUCTS | BOTTOM = PRICE
+================================= */
+@media (max-width: 991px) {
+    /* On mobile, Product Details comes first (order 1) and Price Details comes second (order 2)
+       This is the standard, readable stacking order for mobile. */
+    .product-details-col { order: 1; }
+    .price-details-col { order: 2; margin-top: 20px; } 
+}
+</style>
+
+<div style="max-width: 1200px; margin: 0 auto; padding: 32px 16px;">
+
+    <h2 class="mb-4" style="font-size: 28px; font-weight: 700; color: #1e293b;">
+        <i class="fas fa-shopping-cart" style="color: #3B5998;"></i> My Shopping Cart
+    </h2>
+
+    {% if cart_items %}
+
+    <div class="row g-4">
+        
+        <div class="col-lg-7 product-details-col">
+            <h5 class="mb-3" style="font-size: 18px; font-weight: 700; color: #1e293b;">
+                Product Details ({{ cart_items|length }} Items)
+            </h5>
+
+            {% for item in cart_items %}
+            <div class="card mb-3 border-0 shadow-sm" style="border-radius: 12px; overflow: hidden;">
+                <div class="card-body" style="padding: 20px;">
+                    <div class="row align-items-start g-3">
+
+                        <div class="col-3" style="max-width: 100px;">
+                            <div style="border-radius: 8px; overflow: hidden; width: 80px; height: 80px; background: #f3f4f6;">
+                                {% if item.product.images.first %}
+                                <img src="{{ item.product.images.first.image.url }}" class="img-fluid"
+                                     style="width: 100%; height: 100%; object-fit: cover;">
+                                {% else %}
+                                <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#9ca3af;">
+                                    <i class="fas fa-image"></i>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="col-9">
+                            <h6 class="mb-1" style="font-size: 16px; font-weight: 600; color: #1e293b;">
+                                {{ item.product.name }}
+                            </h6>
+                            
+                            <span class="fw-bold d-block" style="font-size: 18px; color: #3B5998;">
+                                ₹{{ item.total_price }}
+                            </span>
+                            <p class="text-muted mb-1" style="font-size: 14px;">
+                                Qty: {{ item.quantity }} | Size: N/A
+                            </p>
+                            
+                            <div class="d-flex gap-2 mt-2">
+                                <a href="#" style="color:#1b0761;font-size:13px;font-weight:600;text-decoration:none;">EDIT</a>
+                                <a href="{% url 'cart:remove_from_cart' item.id %}" 
+                                   style="color:#150666;font-size:13px;font-weight:600;text-decoration:none;">
+                                    X REMOVE
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="col-12 mt-3 pt-3 border-top d-flex justify-content-between">
+                            <span class="text-muted" style="font-size: 14px;">
+                                Sold by: {{ item.product.vendor.store_name|default:"DailyKart" }}
+                            </span>
+                            <span class="text-success fw-bold" style="font-size: 14px;">Free Delivery</span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+            <div class="mt-4 text-center text-lg-start">
+                <a href="{% url 'products:product_list' %}"
+                   style="color: #64748b; text-decoration: none; font-size: 15px; font-weight: 500;">
+                    <i class="fas fa-shopping-bag me-1"></i> Continue Shopping
+                </a>
+            </div>
+
+        </div>
+
+        <div class="col-lg-5 price-details-col">
+            <div class="card border-0 shadow-lg sticky-top" style="top: 100px; border-radius: 16px;">
+                <div class="card-body" style="padding: 24px;">
+                    <h5 class="mb-4" style="font-size: 20px; font-weight: 700; color: #1e293b;">
+                        Price Details ({{ cart_items|length }} Items)
+                    </h5>
+
+                    <div class="d-flex justify-content-between mb-2">
+                        <span style="color: #475569; font-size: 16px;">Total Product Price:</span>
+                        <span style="font-weight: 600; font-size: 16px;">₹{{ total }}</span>
+                    </div>
+
+                    <div class="d-flex justify-content-between mb-2">
+                        <span style="color: #475569; font-size: 16px;">Delivery Charges:</span>
+                        <span class="text-success" style="font-weight: 600; font-size: 16px;">FREE</span>
+                    </div>
+                    
+                    <hr class="my-3">
+
+                    <div class="d-flex justify-content-between mb-4">
+                        <strong style="font-size: 18px; color: #1e293b;">Order Total:</strong>
+                        <strong style="color: #0a086e; font-size: 28px; font-weight: 700;">₹{{ total }}</strong>
+                    </div>
+
+                    <a href="{% url 'orders:checkout' %}"
+                       class="btn w-100 d-flex align-items-center justify-content-center"
+                       style="padding: 16px 24px; background: #1e0464; color: white; border-radius: 8px; font-size: 18px; font-weight: 700; border: none;">
+                        CONTINUE
+                    </a>
+
+                    <p class="text-center text-muted mt-2" style="font-size: 12px;">
+                        Clicking on 'CONTINUE' will not deduct any money
+                    </p>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    {% else %}
+    <div class="text-center"
+         style="padding: 80px 24px; background: white; border-radius: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.05);">
+        <i class="fas fa-shopping-cart" style="font-size: 64px; color: #cbd5e1; margin-bottom: 24px;"></i>
+        <h3 style="font-size: 24px; font-weight: 700; color: #1e293b; margin-bottom: 12px;">Your cart is empty</h3>
+        <p style="color: #64748b; margin-bottom: 32px;">Add some products to get started!</p>
+
+        <a href="{% url 'products:product_list' %}"
+           style="padding:14px 32px;background:#3B5998;color:white;border-radius:12px;font-size:16px;font-weight:700;text-decoration:none;display:inline-block;">
+            Start Shopping
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

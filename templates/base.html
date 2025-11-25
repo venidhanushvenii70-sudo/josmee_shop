@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Josmee - Online Shopping App{% endblock %}</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e3a8a',
+                        secondary: '#64748b',
+                        accent: '#0f172a',
+                        background: '#f8fafc',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/josmee-modern.css' %}">
+
+    {% block extra_css %}{% endblock %}
+
+    <style>
+        .brand-wrapper {
+            overflow: hidden;
+            width: 100%;
+            padding: 0;
+        }
+
+        /* Define the animation for the continuous scroll effect */
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .animate-scroll {
+            display: flex;
+            animation: scroll 20s linear infinite; /* Adjust speed (20s) as needed */
+        }
+
+        .brand-wrapper:hover .animate-scroll {
+            animation-play-state: paused; /* Pause animation on hover */
+        }
+        
+        /* Ensure no hover effects on individual brand items */
+        .brand-slider div a {
+            transition: none !important;
+        }
+
+    </style>
+</head>
+<body class="bg-background text-gray-900 font-sans flex flex-col min-h-screen">
+
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="hidden md:block bg-secondary text-white text-xs py-2">
+            <div class="container mx-auto px-4 flex justify-between items-center">
+                <div class="flex gap-4">
+                    <a href="tel:+919442085847" class="hover:text-primary transition"><i class="fas fa-phone-alt mr-1"></i> +91 9442085847</a>
+                    <a href="mailto:devasindainfoods@gmail.com" class="hover:text-primary transition"><i class="fas fa-envelope mr-1"></i> devasindainfoods@gmail.com</a>
+                </div>
+                <div>
+                    <a href="{% url 'vendors:become_supplier' %}" class="hover:text-primary transition">Become a Supplier</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex items-center justify-between gap-4">
+                <a href="{% url 'products:home' %}" class="flex-shrink-0 flex items-center gap-2">
+                    <img src="{% static 'images/logo.png' %}" alt="Josmee" class="h-8 md:h-10">
+                    <span class="text-xl md:text-2xl font-serif font-bold text-gray-900">Josmee</span>
+                </a>
+
+                <div class="hidden md:flex flex-1 max-w-2xl mx-auto px-8">
+                    <form action="{% url 'products:product_list' %}" method="GET" class="w-full relative">
+                        <input type="text" name="q" placeholder="Search for products, brands and more" 
+                                class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary outline-none text-sm transition shadow-sm">
+                        <i class="fas fa-search absolute left-3.5 top-3 text-gray-400"></i>
+                    </form>
+                </div>
+
+                <div class="flex items-center gap-6">
+                    <button class="md:hidden text-gray-600 hover:text-primary order-3">
+                        <i class="fas fa-search text-xl"></i>
+                    </button>
+
+                    <a href="{% url 'cart:cart_view' %}" class="relative text-gray-600 hover:text-primary transition flex flex-col items-center group order-2">
+                        <div class="relative">
+                            <i class="fas fa-shopping-cart text-xl group-hover:scale-110 transition"></i>
+                            {% if cart_count > 0 %}
+                            <span class="absolute -top-2 -right-2 bg-primary text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[16px] text-center">
+                                {{ cart_count }}
+                            </span>
+                            {% endif %}
+                        </div>
+                        <span class="hidden md:block text-xs mt-1 font-medium">Cart</span>
+                    </a>
+
+                    {% if user.is_authenticated %}
+                        <div class="relative group hidden md:block order-1">
+                            <button class="flex flex-col items-center text-gray-600 hover:text-primary transition">
+                                <i class="fas fa-user-circle text-xl"></i>
+                                <span class="hidden md:block text-xs mt-1 font-medium">Profile</span>
+                            </button>
+                            <div class="absolute right-0 top-full mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-100 py-1 hidden group-hover:block transition-all transform origin-top-right z-50">
+                                <a href="{% url 'accounts:profile' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary">My Profile</a>
+                                <a href="{% url 'orders:order_list' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary">My Orders</a>
+                                {% if user.user_type == 'vendor' %}
+                                    <a href="{% url 'vendors:dashboard' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary">Seller Dashboard</a>
+                                {% endif %}
+                                <div class="border-t border-gray-100 my-1"></div>
+                                <a href="{% url 'accounts:logout' %}" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-50">Logout</a>
+                            </div>
+                        </div>
+                    {% else %}
+                        <a href="{% url 'accounts:login' %}" class="hidden md:flex flex-col items-center text-gray-600 hover:text-primary transition order-1">
+                            <i class="fas fa-user text-xl"></i>
+                            <span class="hidden md:block text-xs mt-1 font-medium">Login</span>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="hidden md:block border-t border-gray-100 bg-white">
+            <div class="container mx-auto px-4">
+                <nav class="flex justify-center items-center gap-8 py-3 text-sm font-medium text-gray-600">
+                    <a href="{% url 'products:home' %}" class="hover:text-primary transition {% if request.resolver_match.view_name == 'products:home' %}text-primary border-b-2 border-primary{% endif %}">Home</a>
+                    <a href="{% url 'products:product_list' %}" class="hover:text-primary transition {% if request.resolver_match.view_name == 'products:product_list' %}text-primary border-b-2 border-primary{% endif %}">All Products</a>
+                    <a href="{% url 'products:home' %}#categories" class="hover:text-primary transition">Categories</a>
+                    <a href="{% url 'products:deals' %}" class="hover:text-primary transition {% if request.resolver_match.view_name == 'products:deals' %}text-primary border-b-2 border-primary{% endif %}">Deals</a>
+                    <a href="{% url 'products:new_arrivals' %}" class="hover:text-primary transition {% if request.resolver_match.view_name == 'products:new_arrivals' %}text-primary border-b-2 border-primary{% endif %}">New Arrivals</a>
+                    <a href="{% url 'products:about' %}" class="hover:text-primary transition {% if request.resolver_match.view_name == 'products:about' %}text-primary border-b-2 border-primary{% endif %}">About</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        {% if messages %}
+            <div class="container mx-auto px-4 mt-4">
+                {% for message in messages %}
+                    <div class="p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50" role="alert">
+                        <span class="font-medium">Notice:</span> {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+
+       
+        </main>
+
+    <footer class="bg-gray-900 text-gray-300 pt-16 pb-8 mt-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+                <div class="col-span-1 md:col-span-1">
+                    <a href="/" class="flex items-center gap-2 mb-4">
+                        <img src="{% static 'images/logo.png' %}" alt="Josmee" class="h-8 brightness-0 invert opacity-80">
+                        <span class="text-2xl font-serif font-bold text-white">Josmee</span>
+                    </a>
+                    <p class="text-sm text-gray-400 mb-6 leading-relaxed">
+                        Discover the best of online shopping with Josmee. High quality products, unbeatable prices, and trusted sellers all in one place.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="https://wa.me/919442085847?text=Welcome%20to%20Josmee%20Online%20Shopping" target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center hover:bg-green-600 transition text-white" aria-label="Contact us on WhatsApp">
+                            <i class="fab fa-whatsapp text-sm"></i>
+                        </a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center hover:bg-primary transition text-white"><i class="fab fa-facebook-f text-sm"></i></a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center hover:bg-primary transition text-white"><i class="fab fa-instagram text-sm"></i></a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center hover:bg-primary transition text-white"><i class="fab fa-twitter text-sm"></i></a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center hover:bg-primary transition text-white"><i class="fab fa-youtube text-sm"></i></a>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-white font-semibold mb-4">Shop</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="{% url 'products:product_list' %}" class="hover:text-white transition">All Products</a></li>
+                        <li><a href="#" class="hover:text-white transition">Trending</a></li>
+                        <li><a href="#" class="hover:text-white transition">New Arrivals</a></li>
+                        <li><a href="#" class="hover:text-white transition">Featured Brands</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-white font-semibold mb-4">Support</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-white transition">Track Order</a></li>
+                        <li><a href="#" class="hover:text-white transition">Returns & Exchange</a></li>
+                        <li><a href="#" class="hover:text-white transition">Shipping Policy</a></li>
+                        <li><a href="#" class="hover:text-white transition">Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-white font-semibold mb-4">Contact Us</h3>
+                    <ul class="space-y-4 text-sm">
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-map-marker-alt mt-1 text-primary"></i>
+                            <span>123 Shopping Street, Retail Park,<br>Chennai, Tamil Nadu - 600001</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-mobile-alt text-primary"></i>
+                            <a href="tel:+919442085847" class="hover:text-white transition">+91 9442085847</a>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-phone-alt text-primary"></i>
+                            <a href="tel:04636250411" class="hover:text-white transition">04636 250411</a>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-envelope text-primary"></i>
+                            <a href="mailto:devasindainfoods@gmail.com" class="hover:text-white transition break-all">devasindainfoods@gmail.com</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500">
+                <p>&copy; 2025 Josmee. All rights reserved.</p>
+                <div class="flex gap-6">
+                    <a href="#" class="hover:text-white transition">Privacy Policy</a>
+                    <a href="#" class="hover:text-white transition">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <div class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 py-2 px-6 flex justify-between items-center z-50 shadow-[0_-2px_10px_rgba(0,0,0,0.05)]">
+        
+        <a href="{% url 'products:home' %}" class="flex flex-col items-center gap-1 {% if request.resolver_match.view_name == 'products:home' %}text-primary{% else %}text-gray-500 hover:text-primary transition{% endif %}">
+            <i class="fas fa-home text-lg"></i>
+            <span class="text-[10px] font-medium">Home</span>
+        </a>
+        
+        <a href="{% url 'products:home' %}#categories" class="flex flex-col items-center gap-1 text-gray-500 hover:text-primary transition">
+            <i class="fas fa-layer-group text-lg"></i>
+            <span class="text-[10px] font-medium">Categories</span>
+        </a>
+        
+        <a href="{% url 'products:product_list' %}" class="flex flex-col items-center gap-1 text-gray-500 hover:text-primary transition">
+            <div class="bg-primary text-white rounded-full p-3 -mt-6 shadow-lg border-4 border-white">
+                <i class="fas fa-search text-lg"></i>
+            </div>
+            <span class="text-[10px] font-medium mt-1">Search</span>
+        </a>
+        
+        <a href="#" class="flex flex-col items-center gap-1 text-gray-500 hover:text-primary transition">
+            <i class="fas fa-heart text-lg"></i>
+            <span class="text-[10px] font-medium">Wishlist</span>
+        </a> 
+        
+        <a href="{% url 'accounts:profile' %}" class="flex flex-col items-center gap-1 text-gray-500 hover:text-primary transition">
+            <i class="fas fa-user text-lg"></i>
+            <span class="text-[10px] font-medium">Account</span>
+        </a>
+    </div>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

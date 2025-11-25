@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Profile - Josmee{% endblock %}
+
+{% block content %}
+<div class="container my-5" style="max-width: 1200px; margin-left: auto; margin-right: auto;">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm" style="border-radius: 16px;">
+                <div class="card-body text-center">
+                    <div style="width: 100px; height: 100px; background: linear-gradient(135deg, #3B5998 0%, #2C4373 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: white; font-size: 40px; font-weight: 800;">
+                        {{ user.username|slice:":1"|upper }}
+                    </div>
+                    <h5>{{ user.username }}</h5>
+                    <p class="text-muted mb-3">{{ user.email }}</p>
+                    {% if user.phone %}
+                        <p class="text-muted"><i class="fas fa-phone"></i> {{ user.phone }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="list-group mt-3" style="border-radius: 16px; overflow: hidden;">
+                <a href="{% url 'accounts:profile' %}" class="list-group-item list-group-item-action active" style="background: linear-gradient(135deg, #3B5998 0%, #2C4373 100%); border: none;">
+                    <i class="fas fa-user me-2"></i> My Profile
+                </a>
+                <a href="{% url 'orders:order_list' %}" class="list-group-item list-group-item-action">
+                    <i class="fas fa-box me-2"></i> My Orders
+                </a>
+                <a href="{% url 'cart:cart_view' %}" class="list-group-item list-group-item-action">
+                    <i class="fas fa-shopping-cart me-2"></i> My Cart
+                </a>
+                <a href="{% url 'accounts:logout' %}" class="list-group-item list-group-item-action text-danger">
+                    <i class="fas fa-sign-out-alt me-2"></i> Logout
+                </a>
+            </div>
+        </div>
+        
+        <div class="col-md-9">
+            <div class="card border-0 shadow-sm mb-4" style="border-radius: 16px;">
+                <div class="card-body">
+                    <h4 class="mb-4"><i class="fas fa-user-circle me-2" style="color: #3B5998;"></i>Account Information</h4>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted small">Username</label>
+                            <p class="fw-bold">{{ user.username }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted small">Email</label>
+                            <p class="fw-bold">{{ user.email }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted small">Phone</label>
+                            <p class="fw-bold">{{ user.phone|default:"Not provided" }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted small">Account Type</label>
+                            <p class="fw-bold text-capitalize">{{ user.user_type }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card border-0 shadow-sm" style="border-radius: 16px;">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h4 class="mb-0"><i class="fas fa-map-marker-alt me-2" style="color: #3B5998;"></i>Saved Addresses</h4>
+                        <!-- Changed button to trigger modal instead of link -->
+                        <button type="button" class="btn btn-sm" style="background: linear-gradient(135deg, #3B5998 0%, #2C4373 100%); color: white; border-radius: 8px;" data-bs-toggle="modal" data-bs-target="#addAddressModalProfile">
+                            <i class="fas fa-plus me-1"></i> Add New
+                        </button>
+                    </div>
+                    
+                    {% if addresses %}
+                        <div class="row g-3">
+                            {% for address in addresses %}
+                            <div class="col-md-6">
+                                <div class="p-3" style="background: #f8f9fa; border-radius: 12px; border-left: 4px solid #3B5998;">
+                                    <h6 style="color: #3B5998; font-weight: 700;">{{ address.full_name }}</h6>
+                                    <p class="mb-1 small">{{ address.address_line1 }}{% if address.address_line2 %}, {{ address.address_line2 }}{% endif %}</p>
+                                    <p class="mb-1 small">{{ address.city }}, {{ address.state }} - {{ address.pincode }}</p>
+                                    <p class="mb-0 small text-muted">Phone: {{ address.phone }}</p>
+                                    {% if address.is_default %}<span class="badge bg-success mt-2">Default Address</span>{% endif %}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-map-marked-alt fa-3x mb-3" style="color: #cbd5e1;"></i>
+                            <p class="text-muted">No addresses saved yet</p>
+                            <button type="button" class="btn" style="background: #3B5998; color: white; border-radius: 8px;" data-bs-toggle="modal" data-bs-target="#addAddressModalProfile">
+                                <i class="fas fa-plus me-1"></i> Add Your First Address
+                            </button>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Address Modal for Profile Page -->
+<div class="modal fade" id="addAddressModalProfile" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="border-radius: 12px;">
+            <div class="modal-header" style="background: linear-gradient(135deg, #3B5998 0%, #2C4373 100%); color: white; border: none;">
+                <h5 class="modal-title">
+                    <i class="fas fa-map-marker-alt me-2"></i> Add New Address
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST" action="{% url 'accounts:add_address' %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Full Name</label>
+                        <input type="text" class="form-control" name="full_name" required style="border-radius: 8px; border: 2px solid #e2e8f0;">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Phone Number</label>
+                        <input type="tel" class="form-control" name="phone" required style="border-radius: 8px; border: 2px solid #e2e8f0;">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Address Line 1</label>
+                        <input type="text" class="form-control" name="address_line1" placeholder="House no., Building name" required style="border-radius: 8px; border: 2px solid #e2e8f0;">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Address Line 2</label>
+                        <input type="text" class="form-control" name="address_line2" placeholder="Road name, Area, Colony (Optional)" style="border-radius: 8px; border: 2px solid #e2e8f0;">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">City</label>
+                            <input type="text" class="form-control" name="city" required style="border-radius: 8px; border: 2px solid #e2e8f0;">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">State</label>
+                            <input type="text" class="form-control" name="state" required style="border-radius: 8px; border: 2px solid #e2e8f0;">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Pin Code</label>
+                        <input type="text" class="form-control" name="pincode" required style="border-radius: 8px; border: 2px solid #e2e8f0;">
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="is_default" id="setDefaultProfile">
+                        <label class="form-check-label" for="setDefaultProfile">
+                            Set as default address
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border-top: 2px solid #e2e8f0;">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" style="border-radius: 8px;">Cancel</button>
+                    <button type="submit" class="btn" style="background: #3B5998; color: white; border-radius: 8px;">Add Address</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

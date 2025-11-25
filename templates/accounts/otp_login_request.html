@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}OTP Login - Josmee{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 500px; margin-top: 80px; margin-bottom: 80px;">
+    <div class="josmee-cta-card" style="padding: 40px;">
+        <div class="text-center mb-4">
+            <div style="width: 80px; height: 80px; background: white; border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                <i class="fas fa-mobile-alt" style="font-size: 40px; color: var(--josmee-primary);"></i>
+            </div>
+            <h2 style="color: white; font-size: 28px; font-weight: 800;">Login with OTP</h2>
+            <p style="color: rgba(255,255,255,0.9); margin-top: 10px;">Enter your mobile number to receive a verification code</p>
+        </div>
+
+        <form method="post" style="position: relative; z-index: 1;">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label for="phone" style="color: white; font-weight: 600; margin-bottom: 10px; display: block;">
+                    <i class="fas fa-phone me-2"></i>Mobile Number
+                </label>
+                <div style="background: white; border-radius: 12px; padding: 4px; display: flex; align-items: center;">
+                    <span style="padding: 0 15px; color: #64748b; font-weight: 600;">+91</span>
+                    <input 
+                        type="tel" 
+                        class="form-control" 
+                        id="phone" 
+                        name="phone" 
+                        placeholder="Enter 10-digit mobile number"
+                        maxlength="10"
+                        pattern="[0-9]{10}"
+                        required
+                        style="border: none; box-shadow: none; font-size: 16px; padding: 12px;"
+                    >
+                </div>
+                <small style="color: rgba(255,255,255,0.8); display: block; margin-top: 8px;">
+                    <i class="fas fa-info-circle me-1"></i>We'll send you a 6-digit OTP
+                </small>
+            </div>
+
+            <button type="submit" class="josmee-btn josmee-btn-primary w-100" style="background: white; color: var(--josmee-primary); font-size: 16px; padding: 14px;">
+                <i class="fas fa-paper-plane me-2"></i>Send OTP
+            </button>
+        </form>
+
+        <div class="text-center mt-4" style="position: relative; z-index: 1;">
+            <p style="color: rgba(255,255,255,0.9);">or</p>
+            <a href="{% url 'accounts:login' %}" style="color: white; font-weight: 600; text-decoration: none;">
+                <i class="fas fa-sign-in-alt me-2"></i>Login with Username & Password
+            </a>
+        </div>
+
+        <div class="text-center mt-4" style="position: relative; z-index: 1;">
+            <p style="color: rgba(255,255,255,0.8); font-size: 14px;">
+                Don't have an account? 
+                <a href="{% url 'accounts:register' %}" style="color: white; font-weight: 700;">Register here</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+document.getElementById('phone').addEventListener('input', function(e) {
+    this.value = this.value.replace(/[^0-9]/g, '');
+});
+</script>
+{% endblock %}
+{% endblock %}
