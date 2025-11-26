@@ -249,30 +249,43 @@ def add_product(request):
         return redirect('vendors:seller_registration_step1')
     
     vendor = request.user.vendor_profile
-    
+    categories = Category.objects.all()
+
     if request.method == 'POST':
         form = ProductForm(request.POST)
+        images = request.FILES.getlist('images')
+
         if form.is_valid():
             product = form.save(commit=False)
+
             product.vendor = vendor
             product.slug = slugify(f"{product.name}-{vendor.id}")
+            product.is_active = True      # ⭐ VERY IMPORTANT (Homepage visibility)
+            product.stock = form.cleaned_data.get('stock')
+            product.category = form.cleaned_data.get('category')
+            product.price = form.cleaned_data.get('price')
+            product.discount_price = form.cleaned_data.get('discount_price')
+
             product.save()
-            
-            # Handle multiple image uploads
-            images = request.FILES.getlist('images')
-            for index, image in enumerate(images):
+
+            # Save images
+            for index, img in enumerate(images):
                 ProductImage.objects.create(
                     product=product,
-                    image=image,
+                    image=img,
                     is_primary=(index == 0)
                 )
-            
+
             messages.success(request, f'Product "{product.name}" added successfully!')
             return redirect('vendors:dashboard')
+
     else:
         form = ProductForm()
-    
-    return render(request, 'vendors/add_product.html', {'form': form})
+
+    return render(request, 'vendors/add_product.html', {
+        'form': form,
+        'categories': categories
+    })
 
 @login_required
 def edit_profile(request):
