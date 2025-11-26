@@ -124,3 +124,14 @@ class ValueProposition(models.Model):
     
     def __str__(self):
         return self.title
+
+# products/models.py
+
+class Product(models.Model):
+    # ... your other fields ...
+    is_active = models.BooleanField(default=True)  # <-- Make default True
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(f"{self.name}-{self.vendor.id}")
+        super().save(*args, **kwargs)

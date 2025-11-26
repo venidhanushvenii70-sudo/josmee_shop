@@ -99,3 +99,23 @@ def product_detail(request, slug):
         'product': product,
         'related_products': related_products
     })
+
+# products/views.py
+
+def home(request):
+    # Show 12 random active products
+    featured_products = Product.objects.filter(is_active=True).order_by('?')[:12]
+    
+    deals_products = Product.objects.filter(is_active=True, discount_price__isnull=False).order_by('?')[:8]
+    
+    categories = Category.objects.all()[:10]
+    hero_sliders = HeroSlider.objects.filter(is_active=True).order_by('order')
+    brands = Brand.objects.filter(is_featured=True)[:12]
+
+    return render(request, 'products/home.html', {
+        'recommendations': featured_products,
+        'deals_products': deals_products,
+        'categories': categories,
+        'hero_sliders': hero_sliders,
+        'brands': brands,
+    })

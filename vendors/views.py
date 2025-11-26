@@ -301,3 +301,43 @@ def become_supplier(request):
             return redirect('vendors:seller_registration_step1')
     
     return render(request, 'vendors/become_supplier.html')
+
+
+@login_required
+def add_product(request):
+    if not hasattr(request.user, 'vendor_profile'):
+        messages.error(request, 'Please complete seller registration first')
+        return redirect('vendors:seller_registration_step1')
+    
+    vendor = request.user.vendor_profile
+    
+    if request.method == 'POST':
+        form = ProductForm(request.POST)
+        if form.is_valid():
+            product = form.save(commit=False)
+            product.vendor = vendor
+            product.slug = slugify(f"{product.name}-{vendor.id}")
+            product.save()
+            
+            # Handle multiple image uploads
+            images = request.FILES.getlist('images')
+            for index, image in enumerate(images):
+                ProductImage.objects.create(
+                    product=product,
+                    image=image,
+                    is_primary=(index == 0)
+                )
+            
+            # 🔹 Send notification to seller
+            SellerNotification.objects.create(
+                vendor=vendor,
+                title=f'Product "{product.name}" Added',
+                message=f'Your product "{product.name}" has been successfully added to your store.'
+            )
+            
+            messages.success(request, f'Product "{product.name}" added successfully!')
+            return redirect('vendors:dashboard')
+    else:
+        form = ProductForm()
+    
+    return render(request, 'vendors/add_product.html', {'form': form})
