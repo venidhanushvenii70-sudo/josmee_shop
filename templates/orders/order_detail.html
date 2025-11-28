@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Order #{{ order.order_number }} Details{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-6">
+
+    <h1 class="text-2xl font-bold mb-6">Order Details - #{{ order.order_number }}</h1>
+
+    <!-- Customer Info & Delivery Address -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+
+        <!-- Customer Info -->
+        <div class="bg-white shadow rounded-lg p-5">
+            <h2 class="text-lg font-semibold mb-4">Customer Info</h2>
+            <p><strong>Name:</strong> {{ order.user.get_full_name }}</p>
+            <p><strong>Email:</strong> {{ order.user.email }}</p>
+            <p><strong>Phone:</strong> {{ order.address.phone_number }}</p>
+        </div>
+
+        <!-- Delivery Address -->
+        <div class="bg-white shadow rounded-lg p-5">
+            <h2 class="text-lg font-semibold mb-4">Delivery Address</h2>
+            <p>{{ order.address.address_line1 }}{% if order.address.address_line2 %}, {{ order.address.address_line2 }}{% endif %}</p>
+            <p>{{ order.address.city }}, {{ order.address.state }} - {{ order.address.zipcode }}</p>
+        </div>
+
+    </div>
+
+    <!-- Order Info -->
+    <div class="bg-white shadow rounded-lg p-5 mb-8">
+        <h2 class="text-lg font-semibold mb-4">Order Info</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <p><strong>Status:</strong>
+                {% if order.status == 'pending' %}
+                    <span class="text-yellow-500 font-semibold">{{ order.get_status_display }}</span>
+                {% elif order.status == 'shipped' %}
+                    <span class="text-blue-500 font-semibold">{{ order.get_status_display }}</span>
+                {% elif order.status == 'delivered' %}
+                    <span class="text-green-500 font-semibold">{{ order.get_status_display }}</span>
+                {% else %}
+                    <span class="text-red-500 font-semibold">{{ order.get_status_display }}</span>
+                {% endif %}
+            </p>
+            <p><strong>Payment Method:</strong> {{ order.payment_method }}</p>
+            <p><strong>Total Amount:</strong> ₹{{ order.total_amount }}</p>
+            <p><strong>Placed On:</strong> {{ order.created_at|date:"d M Y, h:i A" }}</p>
+        </div>
+    </div>
+
+    <!-- Order Items -->
+    <div class="bg-white shadow rounded-lg p-5 mb-6">
+        <h2 class="text-lg font-semibold mb-4">Order Items</h2>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left table-auto border-collapse">
+                <thead>
+                    <tr class="bg-gray-100">
+                        <th class="p-3 border-b">Product</th>
+                        <th class="p-3 border-b">Price</th>
+                        <th class="p-3 border-b">Quantity</th>
+                        <th class="p-3 border-b">Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for data in order_items_with_subtotal %}
+                    <tr class="hover:bg-gray-50">
+                        <td class="p-3 border-b flex items-center gap-3">
+                            {% with primary_image=data.item.product.images.first %}
+                                {% if primary_image %}
+                                    <img src="{{ primary_image.image.url }}" alt="{{ data.item.product.name }}" class="h-12 w-12 object-cover rounded">
+                                {% else %}
+                                    <img src="{% static 'images/placeholder.png' %}" alt="No Image" class="h-12 w-12 object-cover rounded">
+                                {% endif %}
+                            {% endwith %}
+                            <span>{{ data.item.product.name }}</span>
+                        </td>
+                        <td class="p-3 border-b">₹{{ data.item.price }}</td>
+                        <td class="p-3 border-b">{{ data.item.quantity }}</td>
+                        <td class="p-3 border-b font-semibold">₹{{ data.subtotal }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mt-4 text-right font-bold text-lg">
+            Total: ₹{{ order.total_amount }}
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a href="{% url 'orders:order_list' %}" class="inline-block bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-800 transition">Back to My Orders</a>
+    </div>
+</div>
+{% endblock %}

@@ -32,3 +32,22 @@ class OrderItem(models.Model):
     
     def __str__(self):
         return f"{self.order.order_number} - {self.product.name}"
+
+#from django.contrib.auth.models import User
+from django.conf import settings
+
+class Address(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name='order_addresses',  # <-- change this
+        on_delete=models.CASCADE
+    )
+    phone_number = models.CharField(max_length=15)
+    address_line1 = models.CharField(max_length=255)
+    address_line2 = models.CharField(max_length=255, blank=True, null=True)
+    city = models.CharField(max_length=100)
+    state = models.CharField(max_length=100)
+    zipcode = models.CharField(max_length=10)
+
+    def __str__(self):
+        return f"{self.address_line1}, {self.city}"

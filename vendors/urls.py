@@ -12,5 +12,10 @@ urlpatterns = [
     path('setup/', views.setup_store, name='setup_store'),
     path('dashboard/', views.vendor_dashboard, name='dashboard'),
     path('add-product/', views.add_product, name='add_product'),
+    path('edit-product/<int:product_id>/', views.edit_product, name='edit_product'),  # New URL
+    path('delete-product/<int:product_id>/', views.delete_product, name='delete_product'),  # Optional
     path('edit-profile/', views.edit_profile, name='edit_profile'),
+    path('order/update/<int:order_id>/<str:status>/', views.update_order_status, name="update_order_status"),
+    path('dashboard/', views.vendor_dashboard, name='vendor-dashboard'),
+
 ]

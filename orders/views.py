@@ -72,8 +72,20 @@ def checkout(request):
 def order_list(request):
     orders = request.user.orders.all().order_by('-created_at')
     return render(request, 'orders/order_list.html', {'orders': orders})
-
 @login_required
 def order_detail(request, order_id):
     order = get_object_or_404(Order, id=order_id, user=request.user)
-    return render(request, 'orders/order_detail.html', {'order': order})
+
+    # Calculate subtotal for each item
+    order_items_with_subtotal = []
+    for item in order.items.all():
+        subtotal = item.price * item.quantity
+        order_items_with_subtotal.append({
+            'item': item,
+            'subtotal': subtotal
+        })
+
+    return render(request, 'orders/order_detail.html', {
+        'order': order,
+        'order_items_with_subtotal': order_items_with_subtotal
+    })
